@@ -8,10 +8,11 @@ class PianoKeys extends React.Component {
 
     render() {
         //create piano keys
-
+        //set timeout with arrow moving cameras (bind)
         //rotate the key at an angle to see the 3D 
         // The rotation of the 3D object relative to the parent, in euler form.
-        const rotation = new THREE.Euler(1, 0.2);
+        const rotation = new THREE.Euler(0.8, 0.5);
+        //0.8, 0.5
 
         //color would be hardcoded
         //colors is an example so that music notes can be added to it later on instead
@@ -31,14 +32,14 @@ class PianoKeys extends React.Component {
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={new THREE.Vector3(-5 + (1 * whiteIndex), -1 + (0.2 * whiteIndex), 0 + (0 * whiteIndex))}
+                        position={new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.35 * whiteIndex), 0 + (-0.3 * whiteIndex))}
                     >
                         <boxGeometry
                             width={1}
                             height={1}
                             depth={3}
                         />
-                        <meshBasicMaterial
+                        <meshLambertMaterial
                             //if keys.pressed = true then it will change color; if not, it will stay white
                             //can add in different colors based on KeyArray having a color property (ie. keyArray[i].color = keys.color)
                             color={keys.pressed === true ? 0xff44ff : 0xffffff}
@@ -61,14 +62,14 @@ class PianoKeys extends React.Component {
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={new THREE.Vector3(-5.7 + (1 * blackIndex), -0.2 + (0.2 * blackIndex), 0 + (0 * blackIndex))}
+                        position={new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.35 * blackIndex), 0 + (-0.3 * blackIndex))}
                     >
                         <boxGeometry
                             width={0.5}
                             height={0.5}
                             depth={2}
                         />
-                        <meshBasicMaterial
+                        <meshLambertMaterial
                             color={keys.pressed === true ? 0xff44ff : 0x04234d}
                         />
                     </mesh>

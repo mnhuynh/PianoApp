@@ -28,7 +28,7 @@ class Piano extends React.Component {
   keyDown(e) {
 
     if (e.keyCode === 0) {
-      return;
+      return false;
     }
     e.preventDefault();
     // console.log(e.keyCode);
@@ -79,9 +79,9 @@ class Piano extends React.Component {
   //create synth/sound event
   //after keyDown runs, synth runs
   synth(note) {
-    let synth = new Tone.Synth();
+    let synth = new Tone.Synth().toMaster();
     // console.log(synth)
-    synth.toMaster();
+    // synth.toMaster();
     synth.triggerAttackRelease(note, "4n");
   }
 
@@ -101,25 +101,37 @@ class Piano extends React.Component {
     const width = window.innerWidth; // canvas width
     const height = window.innerHeight; // canvas height
 
-    return (<React3
-      mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
-      width={width}
-      height={height}
-    >
-      <scene>
-        <perspectiveCamera
-          name="camera"
-          fov={75}
-          aspect={width / height}
-          near={0.1}
-          far={1000}
+    return (
+      <React3
+        mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
+        width={width}
+        height={height}
+        /*clearColor={0xf0f0f0}*/
+      >
+        <scene>
+          <ambientLight
+            color={0x505050}
+          />
+          <spotLight
+            visible={true}
+            castShadow={true}
+            color={0xffffff}
+            position={new THREE.Vector3(10, 10, 10)}
+            lookAt={new THREE.Vector3(0, 0, 0)}
+          />
+          <perspectiveCamera
+            name="camera"
+            fov={75}
+            aspect={width / height}
+            near={0.1}
+            far={1000}
 
-          position={this.state.cameraPosition}
-        />
-        {/*insert PianoKeys*/}
-        <PianoKeys keyColor={this.state.keyColor} />
-      </scene>
-    </React3>);
+            position={this.state.cameraPosition}
+          />
+          {/*insert PianoKeys*/}
+          <PianoKeys keyColor={this.state.keyColor} playing={this.state.playing} />
+        </scene>
+      </React3>);
   }
 }
 
