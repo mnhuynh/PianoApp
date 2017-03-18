@@ -13,7 +13,7 @@ class Piano extends React.Component {
     this.state = {
       // construct the position vector here, because if we use 'new' within render,
       // React will think that things have changed when they have not.
-      cameraPosition: new THREE.Vector3(0, 0, 10),
+      cameraPosition: new THREE.Vector3(0, 0, 20),
       //ensures that playing the pianokeys is false but when used in setState, the piano keys will play
       playing: false
     }
@@ -106,17 +106,21 @@ class Piano extends React.Component {
         mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
         width={width}
         height={height}
-        /*clearColor={0xf0f0f0}*/
+        shadowMapEnabled
+        shadowMapType={THREE.PCFShadowMap}
+        pixelRatio={window.devicePixelRatio}
       >
         <scene>
           <ambientLight
             color={0x505050}
           />
           <spotLight
-            visible={true}
-            castShadow={true}
             color={0xffffff}
-            position={new THREE.Vector3(10, 10, 10)}
+            castShadow
+            shadowBias={-0.00022}
+            shadowMapWidth={1500}
+            shadowMapHeight={1500}
+            position={new THREE.Vector3(-8, 5, 10)}
             lookAt={new THREE.Vector3(0, 0, 0)}
           />
           <perspectiveCamera
@@ -125,11 +129,22 @@ class Piano extends React.Component {
             aspect={width / height}
             near={0.1}
             far={1000}
-
             position={this.state.cameraPosition}
           />
           {/*insert PianoKeys*/}
           <PianoKeys keyColor={this.state.keyColor} playing={this.state.playing} />
+          <mesh>
+            <planeGeometry
+              height={35}
+              width={55}
+            />
+            <meshBasicMaterial>
+              <texture
+                url="starry.jpg"
+                anisotropy={16}
+              />
+            </meshBasicMaterial>
+          </mesh>
         </scene>
       </React3>);
   }

@@ -1,7 +1,6 @@
 import React from 'react';
 // import React3 from 'react-three-renderer';
 import * as THREE from 'three';
-// import Tone from 'tone';
 import KeyArray from './KeyArray';
 
 class PianoKeys extends React.Component {
@@ -12,12 +11,11 @@ class PianoKeys extends React.Component {
         //rotate the key at an angle to see the 3D 
         // The rotation of the 3D object relative to the parent, in euler form.
         const rotation = new THREE.Euler(0.8, 0.5);
-        //0.8, 0.5
 
         //color would be hardcoded
         //colors is an example so that music notes can be added to it later on instead
         // let colors = [0xffffff, 0xff55ff, 0xbb45ee, 0xaa55a8, 0x6e3493, 0xededed, 0x04234d];
-        
+
         //start both white & black index at 0 so that it doesn't leave spaces in between the 2 keys
         //since it was following the normal index argument in KeyArray.map
         let whiteIndex = 0;
@@ -29,10 +27,12 @@ class PianoKeys extends React.Component {
                 whiteIndex++;
                 return (
                     <mesh
+                        castShadow
+                        receiveShadow
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.35 * whiteIndex), 0 + (-0.3 * whiteIndex))}
+                        position={keys.pressed === true ? new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.33 * whiteIndex), 5 + (-0.3 * whiteIndex)) : new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.35 * whiteIndex), 5 + (-0.3 * whiteIndex))}
                     >
                         <boxGeometry
                             width={1}
@@ -53,16 +53,18 @@ class PianoKeys extends React.Component {
                 //by doing another if statement here, it will increase the blackIndex at just the note substrings that are saved in KeyArray
                 //keys.note.substring(0, 2) == 'C#' => just means that if the 1st two notes = C,#
                 //(0, 1) = 1 character & so (0, 2) = 2 characters
-                if (keys.note.substring(0, 2) === 'C#' || keys.note.substring(0, 2) === 'F#'){
+                if (keys.note.substring(0, 2) === 'C#' || keys.note.substring(0, 2) === 'F#') {
                     blackIndex++
                 }
                 //need to make it skip a key so that it's spilt (2, 3 then 2, 3, etc)
                 return (
                     <mesh
+                        castShadow
+                        receiveShadow
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.35 * blackIndex), 0 + (-0.3 * blackIndex))}
+                        position={keys.pressed === true ? new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.33 * blackIndex), 5 + (-0.3 * blackIndex)) : new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.35 * blackIndex), 5 + (-0.3 * blackIndex))}
                     >
                         <boxGeometry
                             width={0.5}
@@ -70,13 +72,13 @@ class PianoKeys extends React.Component {
                             depth={2}
                         />
                         <meshLambertMaterial
-                            color={keys.pressed === true ? 0xff44ff : 0x04234d}
+                            color={keys.pressed === true ? 0xff44ff : 0x19191e}
                         />
                     </mesh>
                 )
             }
         })
-        
+
         return (
             <group>
                 {keys}

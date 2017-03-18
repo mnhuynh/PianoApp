@@ -73,8 +73,7 @@ let KeyArray = [
         whiteKey: true,
         key: 'J',
         note: 'B4'
-    },
-
+    }
 ]
 
 export default KeyArray;
