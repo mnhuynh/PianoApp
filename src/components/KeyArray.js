@@ -1,3 +1,5 @@
+import React from 'react';
+import MusicNote from './MusicNote';
 //create key array that objects in it for the music notes & keyboard keys 
 //whiteKey: true = white piano keys; whiteKey: false = black piano keys
 //keys can go from 1-10 (i.e.C1-C10)
@@ -6,7 +8,8 @@ let KeyArray = [
         pressed: false,
         whiteKey: true,
         key: 'Z',
-        note: 'C4'
+        note: 'C4',
+        musicNote: <MusicNote />
     },
     {
         pressed: false,
