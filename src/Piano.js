@@ -5,7 +5,7 @@ import Tone from 'tone';
 import PianoKeys from './components/PianoKeys';
 import KeyArray from './components/KeyArray';
 import Resources from './components/Resources';
-import Shapes from './components/Shapes';
+import MusicNote from './components/MusicNote';
 
 class Piano extends React.Component {
   constructor(props, context) {
@@ -17,7 +17,9 @@ class Piano extends React.Component {
       // React will think that things have changed when they have not.
       cameraPosition: new THREE.Vector3(0, 0, 20),
       //ensures that playing the pianokeys is false but when used in setState, the piano keys will play
-      playing: false
+      playing: false,
+      float: new THREE.Vector3(),
+      rotation: new THREE.Euler()
     }
 
     //bind 
@@ -25,6 +27,27 @@ class Piano extends React.Component {
     this.keyUp = this.keyUp.bind(this);
     this.synth = this.synth.bind(this);
   }
+          _onAnimate = () => {
+            // we will get this callback every frame
+
+            // pretend cubeRotation is immutable.
+            // this helps with updates and pure rendering.
+            // React will be sure that the rotation has now updated.
+            this.setState({
+                float: new THREE.Vector3(
+                  this.state.float.x = 0,
+                  this.state.float.z = Math.random() * 2000 - 1000,
+                  -1500
+                )
+                ,
+                rotation: new THREE.Euler(
+                    this.state.rotation.x + 0.1,
+                    this.state.rotation.y + 0.1,
+                    this.state.rotation.z + 0.1
+                ),
+            });
+        };
+
 
   //create an event to enable keyboard keys to pressdown
   keyDown(e) {
@@ -101,6 +124,7 @@ class Piano extends React.Component {
   render() {
     const width = window.innerWidth; // canvas width
     const height = window.innerHeight; // canvas height
+    // position = new THREE.Vector3(0, 300, -1500)
 
     return (
       <React3
@@ -110,6 +134,7 @@ class Piano extends React.Component {
         shadowMapEnabled
         shadowMapType={THREE.PCFShadowMap}
         pixelRatio={window.devicePixelRatio}
+        onAnimate={this._onAnimate}
       >
         <scene>
           <ambientLight
@@ -129,16 +154,17 @@ class Piano extends React.Component {
             fov={75}
             aspect={width / height}
             near={0.1}
-            far={1000}
+            far={4000}
             position={this.state.cameraPosition}
           />
           {/*insert PianoKeys*/}
           <PianoKeys keyColor={this.state.keyColor} playing={this.state.playing} />
-          <Resources/>
+          <Resources />
           <group
-            position={new THREE.Vector3(0, 300, -950)}
+            position={this.state.float}
+            rotation={this.state.rotation}
           >
-            <Shapes/>
+            <MusicNote />
           </group>
           {/*<mesh>
             <planeGeometry
@@ -153,7 +179,8 @@ class Piano extends React.Component {
             </meshBasicMaterial>
           </mesh>*/}
         </scene>
-      </React3>);
+      </React3>
+    )
   }
 }
 
