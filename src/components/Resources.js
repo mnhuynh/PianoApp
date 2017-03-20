@@ -13,7 +13,7 @@ class Resources extends React.Component {
     return (
       <resources>
         {/*left to right clockwise*/}
-        <shape resourceId="fish">
+        <shape resourceId="musicNote">
           <moveTo
             x={0}
             y={circleRadius}
@@ -68,7 +68,8 @@ class Resources extends React.Component {
             y={circleRadius}
           />
         </shape>
-      </resources>);
+      </resources>
+    )
   }
 }
 
