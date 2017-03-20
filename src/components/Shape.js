@@ -45,7 +45,7 @@ class Shape extends React.Component {
                 <mesh
                     // 3d shape
                     position={new THREE.Vector3(x, y, z)}
-                    rotation={new THREE.Euler(0, 3, 0)}
+                    rotation={new THREE.Euler(0, 0, 0)}
                     scale={scale}
                 >
                     <extrudeGeometry
