@@ -42,9 +42,8 @@ class PianoKeys extends React.Component {
                         <meshLambertMaterial
                             //if keys.pressed = true then it will change color; if not, it will stay white
                             //can add in different colors based on KeyArray having a color property (ie. keyArray[i].color = keys.color)
+                            //color={this.EVENT ? color : colorChange}
                             color={keys.pressed === true ? 0xff44ff : 0xffffff}
-                        //color={this.props.keyDown ? 0xff44ff: 0xffffff}
-                        //color={this.EVENT ? color : colorChange}
                         />
                     </mesh>
                 )

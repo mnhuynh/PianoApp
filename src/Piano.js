@@ -4,6 +4,8 @@ import * as THREE from 'three';
 import Tone from 'tone';
 import PianoKeys from './components/PianoKeys';
 import KeyArray from './components/KeyArray';
+import Resources from './components/Resources';
+import Shapes from './components/Shapes';
 
 class Piano extends React.Component {
   constructor(props, context) {
@@ -81,7 +83,6 @@ class Piano extends React.Component {
   synth(note) {
     let synth = new Tone.Synth().toMaster();
     // console.log(synth)
-    // synth.toMaster();
     synth.triggerAttackRelease(note, "4n");
   }
 
@@ -120,7 +121,7 @@ class Piano extends React.Component {
             shadowBias={-0.00022}
             shadowMapWidth={1500}
             shadowMapHeight={1500}
-            position={new THREE.Vector3(-8, 5, 10)}
+            position={new THREE.Vector3(-8, 5, 12)}
             lookAt={new THREE.Vector3(0, 0, 0)}
           />
           <perspectiveCamera
@@ -133,7 +134,13 @@ class Piano extends React.Component {
           />
           {/*insert PianoKeys*/}
           <PianoKeys keyColor={this.state.keyColor} playing={this.state.playing} />
-          <mesh>
+          <Resources/>
+          <group
+            position={new THREE.Vector3(0, 300, -950)}
+          >
+            <Shapes/>
+          </group>
+          {/*<mesh>
             <planeGeometry
               height={35}
               width={55}
@@ -144,7 +151,7 @@ class Piano extends React.Component {
                 anisotropy={16}
               />
             </meshBasicMaterial>
-          </mesh>
+          </mesh>*/}
         </scene>
       </React3>);
   }
