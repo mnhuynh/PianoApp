@@ -27,11 +27,15 @@ class Main extends React.Component {
     }
     //start at middle octave
     this.octave = 4
+    //@https://github.com/Tonejs/Tone.js/wiki/Instruments
+    //4=number of notes that can be played
+    this.synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
 
     //bind 
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
-    this.synth = this.synth.bind(this);
+    this.startSynth = this.startSynth.bind(this);
+    this.stopSynth = this.stopSynth.bind(this);
   }
 
   _onAnimate = () => {
@@ -134,7 +138,7 @@ class Main extends React.Component {
         //if it does then it should = to true since by default it is false
         KeyArray[i].pressed = true;
         // console.log(KeyArray[i].position)
-        this.synth(KeyArray[i].note);
+        this.startSynth(KeyArray[i].note);
         this.setState({
           playing: true,
           notePosition: KeyArray[i].position
@@ -143,11 +147,11 @@ class Main extends React.Component {
     }
     //this loops through the KeyArray & makes sure that if the KeyArray[i].pressed = true, 
     //all the notes in the KeyArray pressed will play
-    for (let i = 0; i < KeyArray.length; i++) {
-      if (KeyArray[i].pressed === true) {
-        this.synth(KeyArray[i].note);
-      }
-    }
+    // for (let i = 0; i < KeyArray.length; i++) {
+    //   if (KeyArray[i].pressed === true) {
+    //     this.synth(KeyArray[i].note);
+    //   }
+    // }
   }
 
   //create event to on release of keyboard pressdown (i.e.keyup)
@@ -159,6 +163,7 @@ class Main extends React.Component {
     for (let i = 0; i < KeyArray.length; i++) {
       if (keyPressed === KeyArray[i].key) {
         KeyArray[i].pressed = false;
+        this.stopSynth(KeyArray[i].note);
         this.setState({
           playing: false
         })
@@ -168,10 +173,14 @@ class Main extends React.Component {
 
   //create synth/sound event
   //after keyDown runs, synth runs
-  synth(note) {
-    let synth = new Tone.Synth().toMaster();
+  startSynth(note) {
+    let synth = this.synth;
     // console.log(synth)
     synth.triggerAttack(note + this.octave);
+  }
+
+  stopSynth(note) {
+    let synth = this.synth;
     synth.triggerRelease(note + this.octave);
   }
 
