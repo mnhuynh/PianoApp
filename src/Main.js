@@ -7,7 +7,7 @@ import KeyArray from './components/KeyArray';
 import Resources from './components/Resources';
 import MusicNote from './components/MusicNote';
 
-class Piano extends React.Component {
+class Main extends React.Component {
   constructor(props, context) {
 
     super(props, context);
@@ -15,39 +15,51 @@ class Piano extends React.Component {
     this.state = {
       // construct the position vector here, because if we use 'new' within render,
       // React will think that things have changed when they have not.
-      cameraPosition: new THREE.Vector3(0, 0, 20),
+      camera: new THREE.Vector3(0, 0, 15),
+      zoomPiano: new THREE.Vector3(),
+      rotatePiano: new THREE.Euler(0, 0, 0),
       //ensures that playing the pianokeys is false but when used in setState, the piano keys will play
       playing: false,
       float: new THREE.Vector3(),
-      rotation: new THREE.Euler()
+      rotation: new THREE.Euler(),
+      notePosition: new THREE.Vector3()
+
     }
+    //start at middle octave
+    this.octave = 4
 
     //bind 
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
     this.synth = this.synth.bind(this);
   }
-          _onAnimate = () => {
-            // we will get this callback every frame
 
-            // pretend cubeRotation is immutable.
-            // this helps with updates and pure rendering.
-            // React will be sure that the rotation has now updated.
-            this.setState({
-                float: new THREE.Vector3(
-                  this.state.float.x = 0,
-                  this.state.float.z = Math.random() * 2000 - 1000,
-                  -1500
-                )
-                ,
-                rotation: new THREE.Euler(
-                    this.state.rotation.x + 0.1,
-                    this.state.rotation.y + 0.1,
-                    this.state.rotation.z + 0.1
-                ),
-            });
-        };
+  _onAnimate = () => {
+    let floatX = (this.state.notePosition.x * 120) - 60;
+    //let floatY = this.state.float.y + 5
+    let floatY = (this.state.notePosition.y * 90) + 300;
+    let rotation = this.state.rotation;
+    // console.log(floatY)
+    // let direction = Math.floor(Math.random() * 100) - 50;
 
+    //determine whether the note has a direction of +1 or -1
+    //each time animate that note, update it's position using that notes direction
+    //make an object with an array for each of the note
+    //if/else statement to 
+
+    this.setState({
+      float: new THREE.Vector3(
+        floatX,
+        floatY,
+        -1200
+      ),
+      rotation: new THREE.Euler(
+        rotation.x + 0.05,
+        rotation.y + 0.1,
+        rotation.z + 0.05
+      ),
+    })
+  }
 
   //create an event to enable keyboard keys to pressdown
   keyDown(e) {
@@ -59,7 +71,58 @@ class Piano extends React.Component {
     // console.log(e.keyCode);
     //change keyCode to characters
     let keyPressed = String.fromCharCode(e.keyCode);
-    // console.log(keyPressed)    
+
+    //moving camera around
+    let zoomPiano = this.state.zoomPiano;
+    let rotatePiano = this.state.rotatePiano;
+    var positionDelta = 1;
+    var rotationDelta = 0.1;
+    // console.log(rotatePiano);
+
+    // left
+    if (e.key === "ArrowLeft") {
+      let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y - rotationDelta, rotatePiano.z)
+      this.setState({
+        rotatePiano: rotate
+      })
+    }
+    //right
+    else if (e.key === "ArrowRight") {
+      let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y + rotationDelta, rotatePiano.z)
+      this.setState({
+        rotatePiano: rotate
+      })
+    }
+    //zoom-in 
+    else if (e.key === "ArrowDown") {
+      let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z - positionDelta)
+      this.setState({
+        zoomPiano: zoom
+      })
+    }
+    //zoom-out
+    else if (e.key === "ArrowUp") {
+      let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z + positionDelta)
+      this.setState({
+        zoomPiano: zoom
+      })
+    }
+
+    //increasing & decreasing octaves 
+    if (e.key === "=") {
+      this.octave = this.octave + 1;
+      //prevent from going higher than octave at 10
+      if (this.octave === 11) {
+        this.octave = 10
+      }
+    } else if (e.key === "-") {
+      this.octave = this.octave - 1;
+      //prevent from going lower than octave at 0
+      if (this.octave === 0) {
+        this.octave = 1
+      }
+    }
+    // console.log(this.octave) 
     //loop through key array until we find the key whose key code matches the key code that was pressed
     for (let i = 0; i < KeyArray.length; i++) {
       if (keyPressed === KeyArray[i].key) {
@@ -70,9 +133,11 @@ class Piano extends React.Component {
         //this takes in whether or not the keyPressed in the KeyArray is actually pressed => KeyArray[i].pressed 
         //if it does then it should = to true since by default it is false
         KeyArray[i].pressed = true;
+        // console.log(KeyArray[i].position)
         this.synth(KeyArray[i].note);
         this.setState({
-          playing: true
+          playing: true,
+          notePosition: KeyArray[i].position
         })
       }
     }
@@ -106,7 +171,8 @@ class Piano extends React.Component {
   synth(note) {
     let synth = new Tone.Synth().toMaster();
     // console.log(synth)
-    synth.triggerAttackRelease(note, "4n");
+    synth.triggerAttack(note + this.octave);
+    synth.triggerRelease(note + this.octave);
   }
 
   //Mount
@@ -124,8 +190,18 @@ class Piano extends React.Component {
   render() {
     const width = window.innerWidth; // canvas width
     const height = window.innerHeight; // canvas height
+    const d = 20;
     // position = new THREE.Vector3(0, 300, -1500)
 
+    //create musicNoteJSX to get the <MusicNote /> position == KeyArray[i].position
+    /*let musicNoteJSX = [];
+    for (let i = 0; i < KeyArray.length; i++) {
+      musicNoteJSX.push(
+        <group key={i} position={KeyArray[i].position}>
+          <MusicNote />
+        </group>)
+    }*/
+    // rotation={this.state.rotateCamera}
     return (
       <React3
         mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
@@ -140,40 +216,64 @@ class Piano extends React.Component {
           <ambientLight
             color={0x505050}
           />
-          <spotLight
+          <directionalLight
+            color={0xffffff}
+            intensity={1.75}
+
+            castShadow
+
+            shadowMapWidth={1024}
+            shadowMapHeight={1024}
+
+            shadowCameraLeft={-d}
+            shadowCameraRight={d}
+            shadowCameraTop={d}
+            shadowCameraBottom={-d}
+
+            shadowCameraFar={3 * d}
+            shadowCameraNear={d}
+
+            position={new THREE.Vector3(-20, 5, 15)}
+            lookAt={new THREE.Vector3(0, 0, 0)}
+          />
+          {/*<spotLight
             color={0xffffff}
             castShadow
             shadowBias={-0.00022}
             shadowMapWidth={1500}
             shadowMapHeight={1500}
-            position={new THREE.Vector3(-8, 5, 12)}
+            position={new THREE.Vector3(-8, 5, 15)}
             lookAt={new THREE.Vector3(0, 0, 0)}
-          />
+          />*/}
           <perspectiveCamera
             name="camera"
             fov={75}
             aspect={width / height}
             near={0.1}
-            far={4000}
-            position={this.state.cameraPosition}
+            far={10000}
+            position={this.state.camera}
           />
           {/*insert PianoKeys*/}
-          <PianoKeys keyColor={this.state.keyColor} playing={this.state.playing} />
-          <Resources />
-          <group
-            position={this.state.float}
-            rotation={this.state.rotation}
-          >
-            <MusicNote />
+          <group rotation={this.state.rotatePiano} position={this.state.zoomPiano} >
+            <PianoKeys playing={this.state.playing} />
+            <Resources />
+            <group
+              visible={this.state.playing === true ? true : false}
+              position={this.state.float}
+              rotation={this.state.rotation}
+            >
+              <MusicNote />
+            </group>
           </group>
-          {/*<mesh>
+          {/*<mesh
+          position={new THREE.Vector3(0, 0, -10)}>
             <planeGeometry
               height={35}
               width={55}
             />
             <meshBasicMaterial>
               <texture
-                url="starry.jpg"
+                url="stars.jpg"
                 anisotropy={16}
               />
             </meshBasicMaterial>
@@ -184,4 +284,4 @@ class Piano extends React.Component {
   }
 }
 
-export default Piano;
+export default Main;

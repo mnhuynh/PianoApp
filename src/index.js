@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Piano from './Piano';
+import Main from './Main';
 import './index.css';
 
 ReactDOM.render(
-  <Piano />,
+  <Main />,
   document.getElementById('root')
 );

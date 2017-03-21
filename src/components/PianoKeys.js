@@ -1,5 +1,4 @@
 import React from 'react';
-// import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import KeyArray from './KeyArray';
 
@@ -25,6 +24,9 @@ class PianoKeys extends React.Component {
             if (keys.whiteKey === true) {
                 //whiteIndex increments by +1
                 whiteIndex++;
+                let keyPosition = keys.pressed === true ? new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.33 * whiteIndex), 5 + (-0.3 * whiteIndex)) : 
+                new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.35 * whiteIndex), 5 + (-0.3 * whiteIndex))
+                KeyArray[index].position = keyPosition;
                 return (
                     <mesh
                         castShadow
@@ -32,7 +34,7 @@ class PianoKeys extends React.Component {
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={keys.pressed === true ? new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.33 * whiteIndex), 5 + (-0.3 * whiteIndex)) : new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.35 * whiteIndex), 5 + (-0.3 * whiteIndex))}
+                        position={keyPosition}
                     >
                         <boxGeometry
                             width={1}
@@ -43,7 +45,7 @@ class PianoKeys extends React.Component {
                             //if keys.pressed = true then it will change color; if not, it will stay white
                             //can add in different colors based on KeyArray having a color property (ie. keyArray[i].color = keys.color)
                             //color={this.EVENT ? color : colorChange}
-                            color={keys.pressed === true ? 0xff44ff : 0xffffff}
+                            color={keys.pressed === true ? keys.color : 0xffffff}
                         />
                     </mesh>
                 )
@@ -55,6 +57,9 @@ class PianoKeys extends React.Component {
                 if (keys.note.substring(0, 2) === 'C#' || keys.note.substring(0, 2) === 'F#') {
                     blackIndex++
                 }
+                let keyPosition = keys.pressed === true ? new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.33 * blackIndex), 5 + (-0.3 * blackIndex)) : 
+                new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.35 * blackIndex), 5 + (-0.3 * blackIndex));
+                KeyArray[index].position = keyPosition;
                 //need to make it skip a key so that it's spilt (2, 3 then 2, 3, etc)
                 return (
                     <mesh
@@ -63,7 +68,7 @@ class PianoKeys extends React.Component {
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={keys.pressed === true ? new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.33 * blackIndex), 5 + (-0.3 * blackIndex)) : new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.35 * blackIndex), 5 + (-0.3 * blackIndex))}
+                        position={keyPosition}
                     >
                         <boxGeometry
                             width={0.5}
@@ -71,7 +76,7 @@ class PianoKeys extends React.Component {
                             depth={2}
                         />
                         <meshLambertMaterial
-                            color={keys.pressed === true ? 0xff44ff : 0x19191e}
+                            color={keys.pressed === true ? keys.color : 0x19191e}
                         />
                     </mesh>
                 )
