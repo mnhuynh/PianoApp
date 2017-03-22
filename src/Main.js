@@ -289,7 +289,9 @@ class Main extends React.Component {
             </group>
 
             {/*<mesh
-          position={new THREE.Vector3(0, 0, -10)}>
+          position={new THREE.Vector3(0, 0, -10)}
+          visible={this.state.playing === true ? true : false}
+          >
             <planeGeometry
               height={35}
               width={55}
