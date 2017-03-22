@@ -72,16 +72,14 @@ class Main extends React.Component {
       return false;
     }
     e.preventDefault();
-    // console.log(e.keyCode);
     //change keyCode to characters
     let keyPressed = String.fromCharCode(e.keyCode);
 
-    //moving camera around
+    //moving piano around
     let zoomPiano = this.state.zoomPiano;
     let rotatePiano = this.state.rotatePiano;
     var positionDelta = 1;
     var rotationDelta = 0.1;
-    // console.log(rotatePiano);
 
     // left
     if (e.key === "ArrowLeft") {
@@ -127,6 +125,7 @@ class Main extends React.Component {
       }
     }
     // console.log(this.octave) 
+
     //loop through key array until we find the key whose key code matches the key code that was pressed
     for (let i = 0; i < KeyArray.length; i++) {
       if (keyPressed === KeyArray[i].key) {
@@ -137,7 +136,7 @@ class Main extends React.Component {
         //this takes in whether or not the keyPressed in the KeyArray is actually pressed => KeyArray[i].pressed 
         //if it does then it should = to true since by default it is false
         KeyArray[i].pressed = true;
-        // console.log(KeyArray[i].position)
+        // start synth
         this.startSynth(KeyArray[i].note);
         this.setState({
           playing: true,
@@ -145,11 +144,13 @@ class Main extends React.Component {
         })
       }
     }
-    //this loops through the KeyArray & makes sure that if the KeyArray[i].pressed = true, 
-    //all the notes in the KeyArray pressed will play
+    //enable multiple notes to pop up simultaneously when key is pressed
     // for (let i = 0; i < KeyArray.length; i++) {
     //   if (KeyArray[i].pressed === true) {
-    //     this.synth(KeyArray[i].note);
+    //     this.setState({
+    //       playing: true,
+    //       notePosition: KeyArray[i].position
+    //     })
     //   }
     // }
   }
@@ -163,6 +164,7 @@ class Main extends React.Component {
     for (let i = 0; i < KeyArray.length; i++) {
       if (keyPressed === KeyArray[i].key) {
         KeyArray[i].pressed = false;
+        //stop synth
         this.stopSynth(KeyArray[i].note);
         this.setState({
           playing: false
@@ -175,7 +177,6 @@ class Main extends React.Component {
   //after keyDown runs, synth runs
   startSynth(note) {
     let synth = this.synth;
-    // console.log(synth)
     synth.triggerAttack(note + this.octave);
   }
 
@@ -200,7 +201,6 @@ class Main extends React.Component {
     const width = window.innerWidth; // canvas width
     const height = window.innerHeight; // canvas height
     const d = 20;
-    // position = new THREE.Vector3(0, 300, -1500)
 
     //create musicNoteJSX to get the <MusicNote /> position == KeyArray[i].position
     /*let musicNoteJSX = [];
@@ -210,42 +210,55 @@ class Main extends React.Component {
           <MusicNote />
         </group>)
     }*/
-    // rotation={this.state.rotateCamera}
     return (
-      <React3
-        mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
-        width={width}
-        height={height}
-        shadowMapEnabled
-        shadowMapType={THREE.PCFShadowMap}
-        pixelRatio={window.devicePixelRatio}
-        onAnimate={this._onAnimate}
-      >
-        <scene>
-          <ambientLight
-            color={0x505050}
-          />
-          <directionalLight
-            color={0xffffff}
-            intensity={1.75}
+      <div ref="container">
+        <div style={{
+          color: 'white',
+          position: 'absolute',
+          top: '10px',
+          width: '100%',
+          marginLeft: '10px',
+          textAlign: 'left',
+          fontSize: '12px'
+        }}
+        >
+          Use arrow keys to zoom or rotate<br />
+          Use the keys QWERTYU and 2, 3, 5, 6, 7 to play to piano <br />
+          To increase or lower the octave use the keys + and - </div>
+        <React3
+          mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
+          width={width}
+          height={height}
+          shadowMapEnabled
+          shadowMapType={THREE.PCFShadowMap}
+          pixelRatio={window.devicePixelRatio}
+          onAnimate={this._onAnimate}
+        >
+          <scene>
+            <ambientLight
+              color={0x505050}
+            />
+            <directionalLight
+              color={0xffffff}
+              intensity={1.75}
 
-            castShadow
+              castShadow
 
-            shadowMapWidth={1024}
-            shadowMapHeight={1024}
+              shadowMapWidth={1024}
+              shadowMapHeight={1024}
 
-            shadowCameraLeft={-d}
-            shadowCameraRight={d}
-            shadowCameraTop={d}
-            shadowCameraBottom={-d}
+              shadowCameraLeft={-d}
+              shadowCameraRight={d}
+              shadowCameraTop={d}
+              shadowCameraBottom={-d}
 
-            shadowCameraFar={3 * d}
-            shadowCameraNear={d}
+              shadowCameraFar={3 * d}
+              shadowCameraNear={d}
 
-            position={new THREE.Vector3(-20, 5, 15)}
-            lookAt={new THREE.Vector3(0, 0, 0)}
-          />
-          {/*<spotLight
+              position={new THREE.Vector3(-20, 4, 15)}
+              lookAt={new THREE.Vector3(0, 0, 0)}
+            />
+            {/*<spotLight
             color={0xffffff}
             castShadow
             shadowBias={-0.00022}
@@ -254,17 +267,18 @@ class Main extends React.Component {
             position={new THREE.Vector3(-8, 5, 15)}
             lookAt={new THREE.Vector3(0, 0, 0)}
           />*/}
-          <perspectiveCamera
-            name="camera"
-            fov={75}
-            aspect={width / height}
-            near={0.1}
-            far={10000}
-            position={this.state.camera}
-          />
-          {/*insert PianoKeys*/}
-          <group rotation={this.state.rotatePiano} position={this.state.zoomPiano} >
-            <PianoKeys playing={this.state.playing} />
+            <perspectiveCamera
+              name="camera"
+              fov={75}
+              aspect={width / height}
+              near={0.1}
+              far={10000}
+              position={this.state.camera}
+            />
+            {/*insert PianoKeys*/}
+            <group rotation={this.state.rotatePiano} position={this.state.zoomPiano} >
+              <PianoKeys playing={this.state.playing} />
+            </group>
             <Resources />
             <group
               visible={this.state.playing === true ? true : false}
@@ -273,8 +287,8 @@ class Main extends React.Component {
             >
               <MusicNote />
             </group>
-          </group>
-          {/*<mesh
+
+            {/*<mesh
           position={new THREE.Vector3(0, 0, -10)}>
             <planeGeometry
               height={35}
@@ -287,8 +301,9 @@ class Main extends React.Component {
               />
             </meshBasicMaterial>
           </mesh>*/}
-        </scene>
-      </React3>
+          </scene>
+        </React3>
+      </div>
     )
   }
 }
