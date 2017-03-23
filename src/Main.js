@@ -2,7 +2,7 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import Tone from 'tone';
-import { Button } from 'semantic-ui-react'
+import { Button, Container } from 'semantic-ui-react'
 import PianoKeys from './components/PianoKeys';
 import KeyArray from './components/KeyArray';
 import Resources from './components/Resources';
@@ -45,8 +45,8 @@ class Main extends React.Component {
 
     //animate the music note
     onAnimate = () => {
-        let floatX = this.state.notePosition.x * 77;
-        let floatY = (this.state.notePosition.y * 90) + 500;
+        let floatX = (this.state.notePosition.x * 90);
+        let floatY = (this.state.notePosition.y * 90) + 700;
         let rotation = this.state.rotation;
         // console.log(floatX)
         // console.log(floatY)
@@ -214,28 +214,31 @@ class Main extends React.Component {
             <div ref="container">
                 <div
                     style={{
-                        color: 'white',
+                        color: '#dcd4cf',
                         position: 'absolute',
-                        top: '10px',
                         width: '100%',
-                        marginLeft: '10px',
                         textAlign: 'center',
                         fontSize: '12px'
                     }}
                 >
                     {/*buttons created to switch octaves*/}
-                    <Button onClick={() => this.rangeChange("one")} color="violet" size="mini">
+                    <div style={{ margin: '10px' }}>
+                    <Button inverted={true} onClick={() => this.rangeChange("one")} color="blue" size="mini">
                         Low Range
                     </Button>
-                    <Button onClick={() => this.rangeChange("two")} color="purple" size="mini">
+                    <Button style={{ marginRight: '5px', marginLeft: '5px' }} inverted={true} onClick={() => this.rangeChange("two")} color="purple" size="mini">
                         Middle Range
                     </Button>
-                    <Button onClick={() => this.rangeChange("three")} color="purple" size="mini">
+                    <Button inverted={true} onClick={() => this.rangeChange("three")} color="violet" size="mini">
                         High Range
                     </Button>
-                    {/*Use arrow keys to zoom or rotate<br />
-                    Use the keys QWERTYU and 2, 3, 5, 6, 7 to play to piano <br />
-                    To increase or lower the octave use the keys + and -*/}
+                    </div>
+                    <div>
+                        <p>Use keyboard to play to keyboard<br />
+                            Buttons: Change ranges of keyboard <br />
+                            +/- keys: Rotate keyboard <br />
+                            Arrow keys: Zoom and Move keyboard <br /></p>
+                    </div>
                 </div>
                 <React3
                     mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below

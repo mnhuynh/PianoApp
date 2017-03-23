@@ -3,8 +3,13 @@ import * as THREE from 'three';
 import Shape from './Shape';
 
 class MusicNote extends React.Component {
+    
     shouldComponentUpdate() {
         return false;
+    }
+
+    color() {
+        return new THREE.Color(Math.random() * 0xffffff)
     }
 
     render() {
@@ -12,7 +17,7 @@ class MusicNote extends React.Component {
             <group>
                 <Shape
                     resourceId="musicNote"
-                    color={new THREE.Color(Math.random() * 0xffffff)}
+                    color={0xffffff}
                     x={0}
                     y={0}
                     z={0}
