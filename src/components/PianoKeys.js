@@ -9,7 +9,7 @@ class PianoKeys extends React.Component {
         //set timeout with arrow moving cameras (bind)
         //rotate the key at an angle to see the 3D 
         // The rotation of the 3D object relative to the parent, in euler form.
-        const rotation = new THREE.Euler(0.8, 0.2, 0);
+        const rotation = new THREE.Euler(0.6, 0.2, 0);
 
         //color would be hardcoded
         //colors is an example so that music notes can be added to it later on instead

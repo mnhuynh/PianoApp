@@ -17,7 +17,7 @@ class Main extends React.Component {
             // construct the position vector here, because if we use 'new' within render,
             // React will think that things have changed when they have not.
             camera: new THREE.Vector3(0, 0, 25),
-            zoomPiano: new THREE.Vector3(),
+            moveZoomPiano: new THREE.Vector3(),
             rotatePiano: new THREE.Euler(0, 0, 0),
             float: new THREE.Vector3(),
             rotation: new THREE.Euler(),
@@ -68,40 +68,58 @@ class Main extends React.Component {
     //create an event to enable keyboard keys to pressdown
     keyDown(e) {
 
+        if (e.key === 0) {
+            return false;
+        }
+
         e.preventDefault();
 
         //ZOOM & ROTATE PIANO
-        let zoomPiano = this.state.zoomPiano;
+        let moveZoomPiano = this.state.moveZoomPiano;
         let rotatePiano = this.state.rotatePiano;
         var positionDelta = 1;
         var rotationDelta = 0.1;
 
-        //left
-        if (e.key === "ArrowLeft") {
+        //rotate left
+        if (e.key === "-") {
             let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y - rotationDelta, rotatePiano.z)
             this.setState({
                 rotatePiano: rotate
             })
         }
-        //right
-        else if (e.key === "ArrowRight") {
+        //rotate right
+        else if (e.key === "=") {
             let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y + rotationDelta, rotatePiano.z)
             this.setState({
                 rotatePiano: rotate
             })
         }
+        //move left
+        else if (e.key === "ArrowLeft") {
+            let move = new THREE.Vector3(moveZoomPiano.x - positionDelta, moveZoomPiano.y, moveZoomPiano.z)
+            this.setState({
+                moveZoomPiano: move
+            })
+        }
+        //move right
+        else if (e.key === "ArrowRight") {
+            let move = new THREE.Vector3(moveZoomPiano.x + positionDelta, moveZoomPiano.y, moveZoomPiano.z)
+            this.setState({
+                moveZoomPiano: move
+            })
+        }
         //zoom-in 
         else if (e.key === "ArrowDown") {
-            let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z - positionDelta)
+            let zoom = new THREE.Vector3(moveZoomPiano.x, moveZoomPiano.y, moveZoomPiano.z - positionDelta)
             this.setState({
-                zoomPiano: zoom
+                moveZoomPiano: zoom
             })
         }
         //zoom-out
         else if (e.key === "ArrowUp") {
-            let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z + positionDelta)
+            let zoom = new THREE.Vector3(moveZoomPiano.x, moveZoomPiano.y, moveZoomPiano.z + positionDelta)
             this.setState({
-                zoomPiano: zoom
+                moveZoomPiano: zoom
             })
         }
 
@@ -206,7 +224,7 @@ class Main extends React.Component {
                     }}
                 >
                     {/*buttons created to switch octaves*/}
-                    <Button onClick={() => this.rangeChange("one")} color="purple" size="mini">
+                    <Button onClick={() => this.rangeChange("one")} color="violet" size="mini">
                         Low Range
                     </Button>
                     <Button onClick={() => this.rangeChange("two")} color="purple" size="mini">
@@ -249,9 +267,9 @@ class Main extends React.Component {
                             shadowCameraBottom={-d}
 
                             shadowCameraFar={3 * d}
-                            shadowCameraNear={d}
+                            shadowCameraNear={-10}
 
-                            position={new THREE.Vector3(20, 4, 10)}
+                            position={new THREE.Vector3(-5, 6, 5)}
                             lookAt={new THREE.Vector3(0, 0, 0)}
                         />
                         {/*<spotLight
@@ -272,17 +290,17 @@ class Main extends React.Component {
                             position={this.state.camera}
                         />
                         {/*insert PianoKeys*/}
-                        <group rotation={this.state.rotatePiano} position={this.state.zoomPiano} >
+                        <group rotation={this.state.rotatePiano} position={this.state.moveZoomPiano} >
                             <PianoKeys playing={this.state.playing} />
-                            {/*insert MusicNote*/}
-                            <Resources />
-                            <group
-                                visible={this.state.playing === true ? true : false}
-                                position={this.state.float}
-                                rotation={this.state.rotation}
-                            >
-                                <MusicNote />
-                            </group>
+                        </group>
+                        {/*insert MusicNote*/}
+                        <Resources />
+                        <group
+                            visible={this.state.playing === true ? true : false}
+                            position={this.state.float}
+                            rotation={this.state.rotation}
+                        >
+                            <MusicNote />
                         </group>
                     </scene>
                 </React3>
