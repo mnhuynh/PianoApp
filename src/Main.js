@@ -2,7 +2,7 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import Tone from 'tone';
-import { Button, Container } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 import PianoKeys from './components/PianoKeys';
 import KeyArray from './components/KeyArray';
 import Resources from './components/Resources';
@@ -223,15 +223,15 @@ class Main extends React.Component {
                 >
                     {/*buttons created to switch octaves*/}
                     <div style={{ margin: '10px' }}>
-                    <Button inverted={true} onClick={() => this.rangeChange("one")} color="blue" size="mini">
-                        Low Range
-                    </Button>
-                    <Button style={{ marginRight: '5px', marginLeft: '5px' }} inverted={true} onClick={() => this.rangeChange("two")} color="purple" size="mini">
-                        Middle Range
-                    </Button>
-                    <Button inverted={true} onClick={() => this.rangeChange("three")} color="violet" size="mini">
-                        High Range
-                    </Button>
+                        <Button inverted={true} onClick={() => this.rangeChange("one")} color="blue" size="mini">
+                            Low Range
+                        </Button>
+                        <Button style={{ marginRight: '5px', marginLeft: '5px' }} inverted={true} onClick={() => this.rangeChange("two")} color="purple" size="mini">
+                            Middle Range
+                        </Button>
+                        <Button inverted={true} onClick={() => this.rangeChange("three")} color="violet" size="mini">
+                            High Range
+                        </Button>
                     </div>
                     <div>
                         <p>Use keyboard to play to keyboard<br />
