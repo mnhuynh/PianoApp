@@ -2,312 +2,293 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import Tone from 'tone';
+import { Button } from 'semantic-ui-react'
 import PianoKeys from './components/PianoKeys';
 import KeyArray from './components/KeyArray';
 import Resources from './components/Resources';
 import MusicNote from './components/MusicNote';
 
 class Main extends React.Component {
-  constructor(props, context) {
+    constructor(props, context) {
 
-    super(props, context);
+        super(props, context);
 
-    this.state = {
-      // construct the position vector here, because if we use 'new' within render,
-      // React will think that things have changed when they have not.
-      camera: new THREE.Vector3(0, 0, 15),
-      zoomPiano: new THREE.Vector3(),
-      rotatePiano: new THREE.Euler(0, 0, 0),
-      //ensures that playing the pianokeys is false but when used in setState, the piano keys will play
-      playing: false,
-      float: new THREE.Vector3(),
-      rotation: new THREE.Euler(),
-      notePosition: new THREE.Vector3()
-
-    }
-    //start at middle octave
-    this.octave = 4
-    //@https://github.com/Tonejs/Tone.js/wiki/Instruments
-    //4=number of notes that can be played
-    this.synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
-
-    //bind 
-    this.keyDown = this.keyDown.bind(this);
-    this.keyUp = this.keyUp.bind(this);
-    this.startSynth = this.startSynth.bind(this);
-    this.stopSynth = this.stopSynth.bind(this);
-  }
-
-  _onAnimate = () => {
-    let floatX = (this.state.notePosition.x * 120) - 60;
-    //let floatY = this.state.float.y + 5
-    let floatY = (this.state.notePosition.y * 90) + 300;
-    let rotation = this.state.rotation;
-    // console.log(floatY)
-    // let direction = Math.floor(Math.random() * 100) - 50;
-
-    //determine whether the note has a direction of +1 or -1
-    //each time animate that note, update it's position using that notes direction
-    //make an object with an array for each of the note
-    //if/else statement to 
-
-    this.setState({
-      float: new THREE.Vector3(
-        floatX,
-        floatY,
-        -1200
-      ),
-      rotation: new THREE.Euler(
-        rotation.x + 0.05,
-        rotation.y + 0.1,
-        rotation.z + 0.05
-      ),
-    })
-  }
-
-  //create an event to enable keyboard keys to pressdown
-  keyDown(e) {
-
-    if (e.keyCode === 0) {
-      return false;
-    }
-    e.preventDefault();
-    //change keyCode to characters
-    let keyPressed = String.fromCharCode(e.keyCode);
-
-    //moving piano around
-    let zoomPiano = this.state.zoomPiano;
-    let rotatePiano = this.state.rotatePiano;
-    var positionDelta = 1;
-    var rotationDelta = 0.1;
-
-    // left
-    if (e.key === "ArrowLeft") {
-      let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y - rotationDelta, rotatePiano.z)
-      this.setState({
-        rotatePiano: rotate
-      })
-    }
-    //right
-    else if (e.key === "ArrowRight") {
-      let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y + rotationDelta, rotatePiano.z)
-      this.setState({
-        rotatePiano: rotate
-      })
-    }
-    //zoom-in 
-    else if (e.key === "ArrowDown") {
-      let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z - positionDelta)
-      this.setState({
-        zoomPiano: zoom
-      })
-    }
-    //zoom-out
-    else if (e.key === "ArrowUp") {
-      let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z + positionDelta)
-      this.setState({
-        zoomPiano: zoom
-      })
-    }
-
-    //increasing & decreasing octaves 
-    if (e.key === "=") {
-      this.octave = this.octave + 1;
-      //prevent from going higher than octave at 10
-      if (this.octave === 11) {
-        this.octave = 10
-      }
-    } else if (e.key === "-") {
-      this.octave = this.octave - 1;
-      //prevent from going lower than octave at 0
-      if (this.octave === 0) {
-        this.octave = 1
-      }
-    }
-    // console.log(this.octave) 
-
-    //loop through key array until we find the key whose key code matches the key code that was pressed
-    for (let i = 0; i < KeyArray.length; i++) {
-      if (keyPressed === KeyArray[i].key) {
-        //this if statement is to make sure the sound isn't repeated when key is pressed down
-        if (KeyArray[i].pressed === true) {
-          return;
+        this.state = {
+            // construct the position vector here, because if we use 'new' within render,
+            // React will think that things have changed when they have not.
+            camera: new THREE.Vector3(0, 0, 25),
+            zoomPiano: new THREE.Vector3(),
+            rotatePiano: new THREE.Euler(0, 0, 0),
+            float: new THREE.Vector3(),
+            rotation: new THREE.Euler(),
+            notePosition: new THREE.Vector3(),
+            //ensures that playing the pianokeys is false but when used in setState, the piano keys will play
+            playing: false,
+            //starting position of octave
+            currentRange: "two",
+            ranges: { one: 1, two: 2, three: 3 }
         }
-        //this takes in whether or not the keyPressed in the KeyArray is actually pressed => KeyArray[i].pressed 
-        //if it does then it should = to true since by default it is false
-        KeyArray[i].pressed = true;
-        // start synth
-        this.startSynth(KeyArray[i].note);
-        this.setState({
-          playing: true,
-          notePosition: KeyArray[i].position
-        })
-      }
+
+        //start at middle octave
+        // this.octave = 4
+        //@https://github.com/Tonejs/Tone.js/wiki/Instruments
+        //4=number of notes that can be played
+        this.synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+
+        //bind 
+        this.keyDown = this.keyDown.bind(this);
+        this.keyUp = this.keyUp.bind(this);
+        this.startSynth = this.startSynth.bind(this);
+        this.stopSynth = this.stopSynth.bind(this);
+        this.rangeChange = this.rangeChange.bind(this);
     }
-    //enable multiple notes to pop up simultaneously when key is pressed
-    // for (let i = 0; i < KeyArray.length; i++) {
-    //   if (KeyArray[i].pressed === true) {
-    //     this.setState({
-    //       playing: true,
-    //       notePosition: KeyArray[i].position
-    //     })
-    //   }
-    // }
-  }
 
-  //create event to on release of keyboard pressdown (i.e.keyup)
-  keyUp(e) {
-    e.preventDefault();
-    //this is to make sure that when the pressed keys are released, the keys are no longer playing
-    let keyPressed = String.fromCharCode(e.keyCode);
+    //animate the music note
+    onAnimate = () => {
+        let floatX = this.state.notePosition.x * 77;
+        let floatY = (this.state.notePosition.y * 90) + 500;
+        let rotation = this.state.rotation;
+        // console.log(floatX)
+        // console.log(floatY)
 
-    for (let i = 0; i < KeyArray.length; i++) {
-      if (keyPressed === KeyArray[i].key) {
-        KeyArray[i].pressed = false;
-        //stop synth
-        this.stopSynth(KeyArray[i].note);
         this.setState({
-          playing: false
+            float: new THREE.Vector3(floatX, floatY, -2000),
+            rotation: new THREE.Euler(rotation.x + 0.05, rotation.y + 0.1, rotation.z + 0.05),
         })
-      }
     }
-  }
 
-  //create synth/sound event
-  //after keyDown runs, synth runs
-  startSynth(note) {
-    let synth = this.synth;
-    synth.triggerAttack(note + this.octave);
-  }
+    //to allow buttons to change octaves
+    rangeChange(newRange) {
+        //holds the range of which object[array] it is in
+        this.setState({
+            currentRange: newRange
+        })
+    }
 
-  stopSynth(note) {
-    let synth = this.synth;
-    synth.triggerRelease(note + this.octave);
-  }
+    //create an event to enable keyboard keys to pressdown
+    keyDown(e) {
 
-  //Mount
-  componentDidMount() {
-    document.addEventListener('keydown', this.keyDown, false);
-    document.addEventListener('keyup', this.keyUp, false);
-  }
+        e.preventDefault();
 
-  //Unmount
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.keyDown, false);
-    document.removeEventListener('keyup', this.keyUp, false);
-  }
+        //ZOOM & ROTATE PIANO
+        let zoomPiano = this.state.zoomPiano;
+        let rotatePiano = this.state.rotatePiano;
+        var positionDelta = 1;
+        var rotationDelta = 0.1;
 
-  render() {
-    const width = window.innerWidth; // canvas width
-    const height = window.innerHeight; // canvas height
-    const d = 20;
+        //left
+        if (e.key === "ArrowLeft") {
+            let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y - rotationDelta, rotatePiano.z)
+            this.setState({
+                rotatePiano: rotate
+            })
+        }
+        //right
+        else if (e.key === "ArrowRight") {
+            let rotate = new THREE.Euler(rotatePiano.x, rotatePiano.y + rotationDelta, rotatePiano.z)
+            this.setState({
+                rotatePiano: rotate
+            })
+        }
+        //zoom-in 
+        else if (e.key === "ArrowDown") {
+            let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z - positionDelta)
+            this.setState({
+                zoomPiano: zoom
+            })
+        }
+        //zoom-out
+        else if (e.key === "ArrowUp") {
+            let zoom = new THREE.Vector3(zoomPiano.x, zoomPiano.y, zoomPiano.z + positionDelta)
+            this.setState({
+                zoomPiano: zoom
+            })
+        }
 
-    //create musicNoteJSX to get the <MusicNote /> position == KeyArray[i].position
-    /*let musicNoteJSX = [];
-    for (let i = 0; i < KeyArray.length; i++) {
-      musicNoteJSX.push(
-        <group key={i} position={KeyArray[i].position}>
-          <MusicNote />
-        </group>)
-    }*/
-    return (
-      <div ref="container">
-        <div style={{
-          color: 'white',
-          position: 'absolute',
-          top: '10px',
-          width: '100%',
-          marginLeft: '10px',
-          textAlign: 'left',
-          fontSize: '12px'
-        }}
-        >
-          Use arrow keys to zoom or rotate<br />
-          Use the keys QWERTYU and 2, 3, 5, 6, 7 to play to piano <br />
-          To increase or lower the octave use the keys + and - </div>
-        <React3
-          mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
-          width={width}
-          height={height}
-          shadowMapEnabled
-          shadowMapType={THREE.PCFShadowMap}
-          pixelRatio={window.devicePixelRatio}
-          onAnimate={this._onAnimate}
-        >
-          <scene>
-            <ambientLight
-              color={0x505050}
-            />
-            <directionalLight
-              color={0xffffff}
-              intensity={1.75}
+        //increasing & decreasing octaves when there's only 12 keys & with removal of the numbers in the array
+        // if (e.key === "=") {
+        //   this.octave = this.octave + 1;
+        //   //prevent from going higher than octave at 10
+        //   if (this.octave === 11) {
+        //     this.octave = 10
+        //   }
+        // } else if (e.key === "-") {
+        //   this.octave = this.octave - 1;
+        //   //prevent from going lower than octave at 0
+        //   if (this.octave === 0) {
+        //     this.octave = 1
+        //   }
+        // }
+        // console.log(this.octave) 
 
-              castShadow
+        //loop through key array until we find the key whose keycode matches the key code that was pressed
+        for (let i = 0; i < KeyArray.length; i++) {
+            if (e.key === KeyArray[i].key &&
+                KeyArray[i].range === this.state.ranges[this.state.currentRange])
+            //taking the substring of the KeyArray.note to get the octave number as a string
+            //use string in the state & buttons
+            // (KeyArray[i].note.substring(1,2) === this.state.currentOctave|| 
+            // KeyArray[i].note.substring(2,3) === this.state.currentOctave))
+            {
+                //this if statement makes sure the sound isn't repeated when key is pressed down
+                if (KeyArray[i].pressed === true) {
+                    return;
+                }
+                //below statement takes in whether or not the keyPressed in the KeyArray is actually pressed => KeyArray[i].pressed 
+                //if it does then it should = to true since by default it is false
+                KeyArray[i].pressed = true;
+                //start synth
+                this.startSynth(KeyArray[i].note);
+                this.setState({
+                    playing: true,
+                    notePosition: KeyArray[i].position
+                })
+            }
+        }
+    }
 
-              shadowMapWidth={1024}
-              shadowMapHeight={1024}
+    //create event to release keyboard pressdown (i.e.keyup)
+    keyUp(e) {
+        e.preventDefault();
+        //make sure that when the pressed keys are released, the keys are no longer playing
+        for (let i = 0; i < KeyArray.length; i++) {
+            if (e.key === KeyArray[i].key) {
+                KeyArray[i].pressed = false;
+                //stop synth
+                this.stopSynth(KeyArray[i].note);
+                this.setState({
+                    playing: false
+                })
+            }
+        }
+    }
 
-              shadowCameraLeft={-d}
-              shadowCameraRight={d}
-              shadowCameraTop={d}
-              shadowCameraBottom={-d}
+    //create synth/sound event
+    //after keyDown runs, synth runs
+    startSynth(note) {
+        let synth = this.synth;
+        synth.triggerAttack(note);
+    }
 
-              shadowCameraFar={3 * d}
-              shadowCameraNear={d}
+    stopSynth(note) {
+        let synth = this.synth;
+        synth.triggerRelease(note);
+    }
 
-              position={new THREE.Vector3(-20, 4, 15)}
-              lookAt={new THREE.Vector3(0, 0, 0)}
-            />
-            {/*<spotLight
-            color={0xffffff}
-            castShadow
-            shadowBias={-0.00022}
-            shadowMapWidth={1500}
-            shadowMapHeight={1500}
-            position={new THREE.Vector3(-8, 5, 15)}
-            lookAt={new THREE.Vector3(0, 0, 0)}
-          />*/}
-            <perspectiveCamera
-              name="camera"
-              fov={75}
-              aspect={width / height}
-              near={0.1}
-              far={10000}
-              position={this.state.camera}
-            />
-            {/*insert PianoKeys*/}
-            <group rotation={this.state.rotatePiano} position={this.state.zoomPiano} >
-              <PianoKeys playing={this.state.playing} />
-            </group>
-            <Resources />
-            <group
-              visible={this.state.playing === true ? true : false}
-              position={this.state.float}
-              rotation={this.state.rotation}
-            >
-              <MusicNote />
-            </group>
+    //Mount
+    componentDidMount() {
+        document.addEventListener('keydown', this.keyDown, false);
+        document.addEventListener('keyup', this.keyUp, false);
+    }
 
-            {/*<mesh
-          position={new THREE.Vector3(0, 0, -10)}
-          visible={this.state.playing === true ? true : false}
-          >
-            <planeGeometry
-              height={35}
-              width={55}
-            />
-            <meshBasicMaterial>
-              <texture
-                url="stars.jpg"
-                anisotropy={16}
-              />
-            </meshBasicMaterial>
-          </mesh>*/}
-          </scene>
-        </React3>
-      </div>
-    )
-  }
+    //Unmount
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.keyDown, false);
+        document.removeEventListener('keyup', this.keyUp, false);
+    }
+
+    render() {
+        const width = window.innerWidth; // canvas width
+        const height = window.innerHeight; // canvas height
+        const d = 20;
+
+        return (
+            <div ref="container">
+                <div
+                    style={{
+                        color: 'white',
+                        position: 'absolute',
+                        top: '10px',
+                        width: '100%',
+                        marginLeft: '10px',
+                        textAlign: 'center',
+                        fontSize: '12px'
+                    }}
+                >
+                    {/*buttons created to switch octaves*/}
+                    <Button onClick={() => this.rangeChange("one")} color="purple" size="mini">
+                        Low Range
+                    </Button>
+                    <Button onClick={() => this.rangeChange("two")} color="purple" size="mini">
+                        Middle Range
+                    </Button>
+                    <Button onClick={() => this.rangeChange("three")} color="purple" size="mini">
+                        High Range
+                    </Button>
+                    {/*Use arrow keys to zoom or rotate<br />
+                    Use the keys QWERTYU and 2, 3, 5, 6, 7 to play to piano <br />
+                    To increase or lower the octave use the keys + and -*/}
+                </div>
+                <React3
+                    mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
+                    width={width}
+                    height={height}
+                    shadowMapEnabled
+                    shadowMapType={THREE.PCFShadowMap}
+                    pixelRatio={window.devicePixelRatio}
+                    onAnimate={this.onAnimate}
+                    alpha={true}
+                    clearAlpha={0}
+                >
+                    <scene>
+                        <ambientLight
+                            color={0x505050}
+                        />
+                        <directionalLight
+                            color={0xffffff}
+                            intensity={1.5}
+
+                            castShadow
+
+                            shadowMapWidth={1024}
+                            shadowMapHeight={1024}
+
+                            shadowCameraLeft={-d}
+                            shadowCameraRight={d}
+                            shadowCameraTop={d}
+                            shadowCameraBottom={-d}
+
+                            shadowCameraFar={3 * d}
+                            shadowCameraNear={d}
+
+                            position={new THREE.Vector3(20, 4, 10)}
+                            lookAt={new THREE.Vector3(0, 0, 0)}
+                        />
+                        {/*<spotLight
+                            color={0xffffff}
+                            castShadow
+                            shadowBias={-0.00022}
+                            shadowMapWidth={1500}
+                            shadowMapHeight={1500}
+                            position={new THREE.Vector3(-8, 5, 15)}
+                            lookAt={new THREE.Vector3(0, 0, 0)}
+                        />*/}
+                        <perspectiveCamera
+                            name="camera"
+                            fov={75}
+                            aspect={width / height}
+                            near={0.1}
+                            far={10000}
+                            position={this.state.camera}
+                        />
+                        {/*insert PianoKeys*/}
+                        <group rotation={this.state.rotatePiano} position={this.state.zoomPiano} >
+                            <PianoKeys playing={this.state.playing} />
+                            {/*insert MusicNote*/}
+                            <Resources />
+                            <group
+                                visible={this.state.playing === true ? true : false}
+                                position={this.state.float}
+                                rotation={this.state.rotation}
+                            >
+                                <MusicNote />
+                            </group>
+                        </group>
+                    </scene>
+                </React3>
+            </div>
+        )
+    }
 }
 
 export default Main;

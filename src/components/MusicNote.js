@@ -3,11 +3,6 @@ import * as THREE from 'three';
 import Shape from './Shape';
 
 class MusicNote extends React.Component {
-    constructor(props, context) {
-
-    super(props, context);
-
-    }
     shouldComponentUpdate() {
         return false;
     }

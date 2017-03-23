@@ -1,213 +1,799 @@
-// import * as THREE from 'three';
-// import React from 'react';
-// import MusicNote from './MusicNote';
 //create key array that objects in it for the music notes & keyboard keys 
 //whiteKey: true = white piano keys; whiteKey: false = black piano keys
 //keys can go from 1-10 (i.e.C1-C10)
 let KeyArray = [
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'Z',
-    //     note: 'C',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: false,
-    //     key: 'S',
-    //     note: 'C#4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'X',
-    //     note: 'D4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: false,
-    //     key: 'D',
-    //     note: 'D#4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'C',
-    //     note: 'E4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'V',
-    //     note: 'F4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: false,
-    //     key: 'G',
-    //     note: 'F#4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'B',
-    //     note: 'G4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: false,
-    //     key: 'H',
-    //     note: 'G#4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'N',
-    //     note: 'A4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: false,
-    //     key: 'J',
-    //     note: 'A#4',
-    //     position: null
-    // },
-    // {
-    //     pressed: false,
-    //     whiteKey: true,
-    //     key: 'M',
-    //     note: 'B4',
-    //     position: null
-    // },
     {
         pressed: false,
         whiteKey: true,
-        key: 'Q',
-        note: 'C',
+        key: 'q',
+        note: 'A1',
         position: null,
         color: Math.random() * 0xffffff,
-        // musicNote: <MusicNote />
+        range: 1
     },
     {
         pressed: false,
         whiteKey: false,
         key: '2',
-        note: 'C#',
+        note: 'A#1',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: true,
-        key: 'W',
-        note: 'D',
+        key: 'w',
+        note: 'B1',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'e',
+        note: 'C2',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: false,
-        key: '3',
-        note: 'D#',
+        key: '4',
+        note: 'C#2',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: true,
-        key: 'E',
-        note: 'E',
+        key: 'r',
+        note: 'D2',
         position: null,
-        color: Math.random() * 0xffffff
-    },
-    {
-        pressed: false,
-        whiteKey: true,
-        key: 'R',
-        note: 'F',
-        position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: false,
         key: '5',
-        note: 'F#',
+        note: 'D#2',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: true,
-        key: 'T',
-        note: 'G',
+        key: 't',
+        note: 'E2',
         position: null,
-        color: Math.random() * 0xffffff
-    },
-    {
-        pressed: false,
-        whiteKey: false,
-        key: '6',
-        note: 'G#',
-        position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: true,
-        key: 'Y',
-        note: 'A',
+        key: 'y',
+        note: 'F2',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: false,
         key: '7',
-        note: 'A#',
+        note: 'F#2',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
     },
     {
         pressed: false,
         whiteKey: true,
-        key: 'U',
-        note: 'B',
+        key: 'u',
+        note: 'G2',
         position: null,
-        color: Math.random() * 0xffffff
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '8',
+        note: 'G#2',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'i',
+        note: 'A2',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '9',
+        note: 'A#2',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'o',
+        note: 'B2',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'p',
+        note: 'C3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'a',
+        note: 'C#3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'z',
+        note: 'D3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 's',
+        note: 'D#3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'x',
+        note: 'E3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'c',
+        note: 'F3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'f',
+        note: 'F#3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'v',
+        note: 'G3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'g',
+        note: 'G#3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'b',
+        note: 'A3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'h',
+        note: 'A#3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'n',
+        note: 'B3',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'm',
+        note: 'C4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'k',
+        note: 'C#4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: ',',
+        note: 'D4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 1
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '2',
+        note: 'D#4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'w',
+        note: 'E4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'e',
+        note: 'F4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '4',
+        note: 'F#4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'r',
+        note: 'G4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '5',
+        note: 'G#4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 't',
+        note: 'A4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '6',
+        note: 'A#4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'y',
+        note: 'B4',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'u',
+        note: 'C5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '8',
+        note: 'C#5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'i',
+        note: 'D5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '9',
+        note: 'D#5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'o',
+        note: 'E5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'p',
+        note: 'F5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'a',
+        note: 'F#5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'z',
+        note: 'G5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 's',
+        note: 'G#5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'x',
+        note: 'A5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'd',
+        note: 'A#5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'c',
+        note: 'B5',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'v',
+        note: 'C6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'g',
+        note: 'C#6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'b',
+        note: 'D6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'h',
+        note: 'D#6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'n',
+        note: 'E6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'm',
+        note: 'F6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'k',
+        note: 'F#6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: ',',
+        note: 'G6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'l',
+        note: 'G#6',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 2
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'q',
+        note: 'A7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '2',
+        note: 'A#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'w',
+        note: 'B7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'e',
+        note: 'C7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '4',
+        note: 'C#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'r',
+        note: 'D7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '5',
+        note: 'D#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 't',
+        note: 'E7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'y',
+        note: 'F7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '7',
+        note: 'F#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'u',
+        note: 'G7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '8',
+        note: 'G#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'i',
+        note: 'A7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: '9',
+        note: 'A#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'o',
+        note: 'B7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'p',
+        note: 'C7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'a',
+        note: 'C#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'z',
+        note: 'D7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 's',
+        note: 'D#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'x',
+        note: 'E7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'c',
+        note: 'F7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'f',
+        note: 'F#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'v',
+        note: 'G7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'g',
+        note: 'G#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'b',
+        note: 'A7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: false,
+        key: 'h',
+        note: 'A#7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'n',
+        note: 'B7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
+    },
+    {
+        pressed: false,
+        whiteKey: true,
+        key: 'm',
+        note: 'C7',
+        position: null,
+        color: Math.random() * 0xffffff,
+        range: 3
     }
 ]
-
-//linking the code below to position
-
-// let whiteIndex = 0;
-// let blackIndex = 0;
-
-// for (let i = 0; i < KeyArray.length; i++) {
-//     if (KeyArray[i].whiteKey === true) {
-//         //whiteIndex increments by +1
-//         whiteIndex++;
-//         KeyArray[i].position = KeyArray[i].pressed === true ? new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.33 * whiteIndex), 5 + (-0.3 * whiteIndex)) : new THREE.Vector3(-5 + (0.94 * whiteIndex), -1 + (0.35 * whiteIndex), 5 + (-0.3 * whiteIndex))
-//     } else {
-//         blackIndex++;
-//         //by doing another if statement here, it will increase the blackIndex at just the note substrings that are saved in KeyArray
-//         //keys.note.substring(0, 2) == 'C#' => just means that if the 1st two notes = C,#
-//         //(0, 1) = 1 character & so (0, 2) = 2 characters
-//         if (KeyArray[i].note.substring(0, 2) === 'C#' || KeyArray[i].note.substring(0, 2) === 'F#') {
-//             blackIndex++
-//         }
-//         KeyArray[i].position = KeyArray[i].pressed === true ? new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.33 * blackIndex), 5 + (-0.3 * blackIndex)) : new THREE.Vector3(-5.9 + (0.94 * blackIndex), -0.2 + (0.35 * blackIndex), 5 + (-0.3 * blackIndex))
-//     }
-// }
 
 export default KeyArray;
