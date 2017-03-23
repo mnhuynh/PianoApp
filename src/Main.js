@@ -2,7 +2,7 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import Tone from 'tone';
-import { Button } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react';
 import PianoKeys from './components/PianoKeys';
 import KeyArray from './components/KeyArray';
 import Resources from './components/Resources';
