@@ -18,8 +18,7 @@ class MusicNote extends React.Component {
                     rx={0}
                     ry={0}
                     rz={0}
-                    s={1}
-                />
+                    s={1} />
             </group>
         )
     }
