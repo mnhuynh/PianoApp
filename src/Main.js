@@ -17,7 +17,7 @@ class Main extends React.Component {
             // construct the position vector here, because if we use 'new' within render,
             // React will think that things have changed when they have not.
             camera: new THREE.Vector3(0, 0, 25),
-            moveZoomPiano: new THREE.Vector3(),
+            moveZoomPiano: new THREE.Vector3(0, 3,0),
             rotatePiano: new THREE.Euler(0, 0, 0),
             float: new THREE.Vector3(),
             rotation: new THREE.Euler(),
@@ -46,7 +46,7 @@ class Main extends React.Component {
     //animate the music note
     onAnimate = () => {
         let floatX = (this.state.notePosition.x * 90);
-        let floatY = (this.state.notePosition.y * 90) + 700;
+        let floatY = (this.state.notePosition.y * 90) + 800;
         let rotation = this.state.rotation;
         // console.log(floatX)
         // console.log(floatY)
@@ -212,31 +212,59 @@ class Main extends React.Component {
 
         return (
             <div ref="container">
-                <div
-                    style={{
-                        color: '#dcd4cf',
-                        position: 'absolute',
-                        width: '100%',
-                        textAlign: 'center',
-                        fontSize: '12px'
-                    }}
-                >
+                <div style={{ position: 'relative', width: '100%', zIndex: '10' }}>
+                    <a href="https://www.linkedin.com/in/maziehuynh/">
+                        <Button
+                            style={{ float: 'right', marginTop: '10px', marginRight: '10px' }}
+                            circular={true}
+                            inverted={true}
+                            color="blue"
+                            size="mini">
+                            LinkedIn
+                        </Button>
+                    </a>
+                    <a href="https://github.com/mnhuynh/amazie-synth">
+                        <Button
+                            style={{ float: 'right', margin: '10px' }}
+                            circular={true}
+                            inverted={true}
+                            color="grey"
+                            size="mini">
+                            Source @github
+                        </Button>
+                    </a>
+                </div>
+                <div style={{ position: 'absolute', width: '100%', textAlign: 'center' }}>
                     {/*buttons created to switch octaves*/}
                     <div style={{ margin: '10px' }}>
-                        <Button inverted={true} onClick={() => this.rangeChange("one")} color="blue" size="mini">
+                        <Button
+                            inverted={true}
+                            onClick={() => this.rangeChange("one")}
+                            color="blue"
+                            size="mini">
                             Low Range
                         </Button>
-                        <Button style={{ marginRight: '5px', marginLeft: '5px' }} inverted={true} onClick={() => this.rangeChange("two")} color="purple" size="mini">
+                        <Button
+                            style={{ marginRight: '5px', marginLeft: '5px' }}
+                            inverted={true}
+                            onClick={() => this.rangeChange("two")}
+                            active={this.state.currentRange === "two" ? true : null}
+                            color="purple"
+                            size="mini">
                             Middle Range
                         </Button>
-                        <Button inverted={true} onClick={() => this.rangeChange("three")} color="violet" size="mini">
+                        <Button
+                            inverted={true}
+                            onClick={() => this.rangeChange("three")}
+                            color="violet"
+                            size="mini">
                             High Range
                         </Button>
                     </div>
-                    <div>
+                    <div style={{ color: '#dcd4cf', fontSize: '12px' }}>
                         <p>Use keyboard to play to keyboard<br />
                             Buttons: Change ranges of keyboard <br />
-                            +/- keys: Rotate keyboard <br />
+                            + / - keys: Rotate keyboard <br />
                             Arrow keys: Zoom and Move keyboard <br /></p>
                     </div>
                 </div>
@@ -249,12 +277,10 @@ class Main extends React.Component {
                     pixelRatio={window.devicePixelRatio}
                     onAnimate={this.onAnimate}
                     alpha={true}
-                    clearAlpha={0}
-                >
+                    clearAlpha={0}>
                     <scene>
                         <ambientLight
-                            color={0x505050}
-                        />
+                            color={0x505050} />
                         <directionalLight
                             color={0xffffff}
                             intensity={1.5}
@@ -273,8 +299,7 @@ class Main extends React.Component {
                             shadowCameraNear={-10}
 
                             position={new THREE.Vector3(-5, 6, 5)}
-                            lookAt={new THREE.Vector3(0, 0, 0)}
-                        />
+                            lookAt={new THREE.Vector3(0, 0, 0)} />
                         {/*<spotLight
                             color={0xffffff}
                             castShadow
@@ -290,10 +315,9 @@ class Main extends React.Component {
                             aspect={width / height}
                             near={0.1}
                             far={10000}
-                            position={this.state.camera}
-                        />
+                            position={this.state.camera} />
                         {/*insert PianoKeys*/}
-                        <group rotation={this.state.rotatePiano} position={this.state.moveZoomPiano} >
+                        <group rotation={this.state.rotatePiano} position={this.state.moveZoomPiano}>
                             <PianoKeys playing={this.state.playing} />
                         </group>
                         {/*insert MusicNote*/}
@@ -301,8 +325,7 @@ class Main extends React.Component {
                         <group
                             visible={this.state.playing === true ? true : false}
                             position={this.state.float}
-                            rotation={this.state.rotation}
-                        >
+                            rotation={this.state.rotation}>
                             <MusicNote />
                         </group>
                     </scene>
