@@ -240,6 +240,7 @@ class Main extends React.Component {
                         <Button
                             inverted={true}
                             onClick={() => this.rangeChange("one")}
+                            active={this.state.currentRange === "one" ? true : null}
                             color="blue"
                             size="mini">
                             Low Range
@@ -256,6 +257,7 @@ class Main extends React.Component {
                         <Button
                             inverted={true}
                             onClick={() => this.rangeChange("three")}
+                            active={this.state.currentRange === "three" ? true : null}
                             color="violet"
                             size="mini">
                             High Range
