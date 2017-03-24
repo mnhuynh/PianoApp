@@ -46,18 +46,11 @@ class Shape extends React.Component {
                     // 3d shape
                     position={new THREE.Vector3(x, y, z)}
                     rotation={new THREE.Euler(0, 0, 0)}
-                    scale={scale}
-                >
-                    <extrudeGeometry
-                        settings={extrudeSettings}
-                    >
-                        <shapeResource
-                            resourceId={resourceId}
-                        />
+                    scale={scale}>
+                    <extrudeGeometry settings={extrudeSettings}>
+                        <shapeResource resourceId={resourceId} />
                     </extrudeGeometry>
-                    <meshPhongMaterial
-                        color={color}
-                    />
+                    <meshPhongMaterial color={color} />
                 </mesh>
             </group>
         )
