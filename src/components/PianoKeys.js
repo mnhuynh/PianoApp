@@ -34,19 +34,15 @@ class PianoKeys extends React.Component {
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={keyPosition}
-                    >
+                        position={keyPosition}>
                         <boxGeometry
                             width={0.8}
                             height={1}
-                            depth={4.5}
-                        />
-                        <meshLambertMaterial
-                            //if keys.pressed = true then it will change color; if not, it will stay white
+                            depth={4.5} />
+                        {/*//if keys.pressed = true then it will change color; if not, it will stay white
                             //can add in different colors based on KeyArray having a color property (ie. keyArray[i].color = keys.color)
-                            //color={this.EVENT ? color : colorChange}
-                            color={keys.pressed === true ? keys.color : 0xffffff}
-                        />
+                            //color={this.EVENT ? color : colorChange}*/}
+                        <meshLambertMaterial color={keys.pressed === true ? keys.color : 0xffffff} />
                     </mesh>
                 )
             } else {
@@ -68,16 +64,12 @@ class PianoKeys extends React.Component {
                         key={index}
                         rotation={rotation}
                         //position is calculated this way so that it increments the right amount
-                        position={keyPosition}
-                    >
+                        position={keyPosition}>
                         <boxGeometry
                             width={0.5}
                             height={0.5}
-                            depth={3}
-                        />
-                        <meshLambertMaterial
-                            color={keys.pressed === true ? keys.color : 0x19191e}
-                        />
+                            depth={3} />
+                        <meshLambertMaterial color={keys.pressed === true ? keys.color : 0x19191e} />
                     </mesh>
                 )
             }
